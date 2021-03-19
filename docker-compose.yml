@@ -1,0 +1,29 @@
+version: "3.7"
+
+services:
+  database:
+    image: postgres:11.4-alpine
+    restart: always
+    shm_size: 256M
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: mydb
+    networks:
+      - some-network
+
+  myapp:
+    image: mysampleapp
+    restart: always
+    build:
+      context: mysampleapp
+    networks:
+      - some-network
+    depends_on:
+      - database
+
+
+networks:
+  some-network:
+    driver: bridge
+    internal: true
